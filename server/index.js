@@ -2,15 +2,19 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
 
 const server = http.createServer(app);
 
+const PORT = process.env.PORT || 3001;
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: FRONTEND_URL,
     methods: ["GET", "POST"],
   },
 });
@@ -35,6 +39,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3001, () => {
-  console.log("WebSocket Server active on port 3001");
+server.listen(process.env.PORT, () => {
+  console.log(`WebSocket Server active on port ${PORT}`);
 });
